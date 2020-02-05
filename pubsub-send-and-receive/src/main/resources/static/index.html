@@ -5,11 +5,12 @@
 <form method="POST" action="/sendData">
   Enter text data to dedup:
   <div>
-    <input name="data"/>
-  </div>
-
-  <div>
-    <input type="submit" value="Submit">
+    <form action="/createPerson" method="post">
+      Data: <input type="text" name="data"/><br>
+      Attribute (Key): <input type="text" name="attribute key"/><br>
+      Attribute (Value): <input type="text" name="attribute value"/><br>
+      <input type="submit"/>
+    </form>
   </div>
 
 </form>

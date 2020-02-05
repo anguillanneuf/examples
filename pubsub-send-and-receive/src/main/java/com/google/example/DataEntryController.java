@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 import reactor.core.publisher.EmitterProcessor;
-
+import com.google.gson.Gson;
 /**
  * Takes strings from front-end and directs them to an internal processing queue, to be sent to Cloud Pub/Sub.
  */
@@ -33,7 +33,7 @@ public class DataEntryController {
 	private EmitterProcessor<String> frontEndListener;
 
 	@PostMapping("/sendData")
-	public RedirectView mainPage(@RequestParam String data) {
+	public RedirectView mainPage(@RequestParam("data") String data, @RequestParam("attribute key") String key, @RequestParam("attribute value") String value) {
 		System.out.println("Sending data: " + data);
 
 		// Sends data into local processing queue
