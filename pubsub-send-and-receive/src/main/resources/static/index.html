@@ -5,11 +5,13 @@
 <form method="POST" action="/sendData">
   Enter text data to dedup:
   <div>
-    <form action="/createPerson" method="post">
-      Data: <input type="text" name="data"/><br>
-      Value: <input type="text" name="value"/><br>
-      <input type="submit"/>
-    </form>
+    Data: <input name="data"/>
+    <br/>
+    Key: <input name="key"/>
+  </div>
+
+  <div>
+    <input type="submit" value="Submit">
   </div>
 
 </form>

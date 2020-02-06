@@ -17,7 +17,8 @@
 package com.google.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,15 +33,19 @@ import reactor.core.publisher.EmitterProcessor;
 public class DataEntryController {
 
 	@Autowired
-	private EmitterProcessor<UserMessage> frontEndListener;
+	private EmitterProcessor<Message<String>> frontEndListener;
 
 	@PostMapping("/sendData")
-	public RedirectView mainPage(@RequestParam("data") String data, @RequestParam("value") String value) {
-		System.out.println("Sending data: " + data + " of key " + value + " ..");
+	public RedirectView mainPage(@RequestParam("data") String data, @RequestParam("key") String key) {
+		System.out.println("Sending data: " + data + " of key " + key + " ..");
 
-		UserMessage userMessage = new UserMessage(data, value);
+		Message<String> message = MessageBuilder
+			.withPayload(data)
+			.setHeader("key", key)
+			.build();
+
 		// Sends data into local processing queue
-		this.frontEndListener.onNext(userMessage);
+		this.frontEndListener.onNext(message);
 
 		return new RedirectView("/");
 	}
