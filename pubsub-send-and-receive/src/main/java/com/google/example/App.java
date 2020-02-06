@@ -20,6 +20,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import org.graalvm.compiler.lir.LIRInstruction;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gcp.pubsub.support.converter.JacksonPubSubMessageConverter;
@@ -38,26 +40,15 @@ public class App {
 		SpringApplication.run(App.class, args);
 	}
 
-	/**
-	 * This bean enables serialization/deserialization of Java objects to JSON allowing you
-	 * utilize JSON message payloads in Cloud Pub/Sub.
-	 * @param objectMapper the object mapper to use
-	 * @return a Jackson message converter
-	 */
 	@Bean
-	public JacksonPubSubMessageConverter jacksonPubSubMessageConverter(ObjectMapper objectMapper) {
-		return new JacksonPubSubMessageConverter(objectMapper);
-	}
-
-	@Bean
-	public EmitterProcessor<String> frontEndListener() {
+	public EmitterProcessor<UserMessage> frontEndListener() {
 		return EmitterProcessor.create();
 	}
 
 	// This will automatically send all data from the internal queue to the Pub/Sub topic configured
 	// in application.properties.
 	@Bean
-	Supplier<Flux<String>> sendMessagesForDeduplication(final EmitterProcessor<String> frontEndListener) {
+	Supplier<Flux<UserMessage>> sendMessagesForDeduplication(final EmitterProcessor<UserMessage> frontEndListener) {
 		return () -> frontEndListener;
 	}
 

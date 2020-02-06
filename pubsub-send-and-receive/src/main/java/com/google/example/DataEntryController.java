@@ -17,12 +17,14 @@
 package com.google.example;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 import reactor.core.publisher.EmitterProcessor;
-import com.google.gson.Gson;
+
+
 /**
  * Takes strings from front-end and directs them to an internal processing queue, to be sent to Cloud Pub/Sub.
  */
@@ -30,14 +32,15 @@ import com.google.gson.Gson;
 public class DataEntryController {
 
 	@Autowired
-	private EmitterProcessor<String> frontEndListener;
+	private EmitterProcessor<UserMessage> frontEndListener;
 
 	@PostMapping("/sendData")
-	public RedirectView mainPage(@RequestParam("data") String data, @RequestParam("attribute key") String key, @RequestParam("attribute value") String value) {
-		System.out.println("Sending data: " + data);
+	public RedirectView mainPage(@RequestParam("data") String data, @RequestParam("value") String value) {
+		System.out.println("Sending data: " + data + " of key " + value + " ..");
 
+		UserMessage userMessage = new UserMessage(data, value);
 		// Sends data into local processing queue
-		this.frontEndListener.onNext(data);
+		this.frontEndListener.onNext(userMessage);
 
 		return new RedirectView("/");
 	}
