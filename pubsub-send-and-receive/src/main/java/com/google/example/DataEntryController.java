@@ -37,7 +37,7 @@ public class DataEntryController {
 
 	@PostMapping("/sendData")
 	public RedirectView mainPage(@RequestParam("data") String data, @RequestParam("key") String key) {
-		System.out.println("\tSending data: " + data + " of key " + key + " ..");
+		System.out.println("Sending data: \"" + data + "\" of key \"" + key + "\" ..");
 
 		Message<String> message = MessageBuilder
 			.withPayload(data)
