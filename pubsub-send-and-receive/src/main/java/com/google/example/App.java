@@ -55,7 +55,7 @@ public class App {
 	@Bean
 	Consumer<Message<String>> receiveDedupedMessagesFromDataflow() {
 		return msg -> {
-			System.out.println("\t\tDE-DUPED message: " + msg.getPayload());
+			System.out.println("\tDE-DUPED message: " + msg.getPayload());
 		};
 	}
 
